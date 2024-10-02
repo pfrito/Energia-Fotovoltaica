@@ -19,6 +19,7 @@ export default {
         custom: {
           primary: {
             DEFAULT: "#3490dc",
+            50: "#e6f2ff",
             100: "#b3d9ff",
             200: "#82cfff",
             300: "#4ea8ff",
