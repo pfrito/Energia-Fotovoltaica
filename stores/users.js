@@ -13,7 +13,7 @@ export const useUsersStore = defineStore("users", () => {
     const existingUser = users.value.find((user) => user.email == data.email);
     if (existingUser) {
       if (existingUser.password == data.password) {
-        localStorage.setItem("logged-user", JSON.stringify(data));
+        localStorage.setItem("logged-user", JSON.stringify(existingUser));
         return { success: true, message: "Usuario logueado exitosamente!" };
       } else {
         return {

@@ -36,7 +36,7 @@
 
 <script setup>
 useHead({
-  title: "Login/Register",
+  title: "Autenticarse",
 });
 
 const selectedAuthOption = ref("Login");
