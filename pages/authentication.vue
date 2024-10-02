@@ -18,14 +18,14 @@
     <Transition name="slide-fade">
       <FormRegister v-if="selectedAuthOption == 'Register'" />
     </Transition>
-    <div class="w-full flex flex-col">
-      <span class="text-sm font-semibold text-center">{{
+    <div class="w-full flex flex-col items-center">
+      <span class="text-sm font-semibold">{{
         selectedAuthOption == "Login"
           ? "¿No tienes una cuenta aún?"
           : "¿Ya tienes una cuenta?"
       }}</span>
       <button
-        class="focus:outline-none font-semibold text-custom-primary transition-colors ease-in-out duration-150 hover:text-custom-primary-500"
+        class="w-max focus:outline-none font-semibold text-custom-primary transition-colors ease-in-out duration-150 hover:text-custom-primary-500"
         @click="changeAuthOption"
       >
         {{ selectedAuthOption == "Login" ? "Regístrate" : "Inicia Sesión" }}

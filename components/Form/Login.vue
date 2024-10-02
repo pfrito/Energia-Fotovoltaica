@@ -50,7 +50,8 @@
 <script setup>
 import { z } from "zod";
 
-const customFetch = useCustomFetch();
+const router = useRouter();
+const usersStore = useUsersStore();
 
 const form = ref();
 const state = ref({
@@ -65,14 +66,27 @@ const showPassword = ref(false);
 
 async function submitForm() {
   form.value.validate();
-  try {
-    await customFetch("/api/login", {
-      method: "POST",
-      body: state.value,
-    });
-  } catch (error) {
-    console.error("Error submitting form:", error.response);
-  }
+
+  const { start, finish } = useLoadingIndicator();
+  const toast = useToast();
+
+  start();
+  setTimeout(
+    () => {
+      const { success, message } = usersStore.login(state.value);
+      finish();
+      toast.add({
+        id: uniqueId(),
+        title: success ? "Éxito" : "Error",
+        description: message,
+        icon: success ? "i-mdi-check" : "i-mdi-close-circle-outline",
+        color: success ? "green" : "red",
+        timeout: 3000,
+      });
+      if (success) router.push("/");
+    },
+    Math.floor(Math.random() * 1801) + 200,
+  );
 }
 
 function togglePasswordVisibility() {
