@@ -192,6 +192,8 @@ const users = computed(() => {
 
 const total = computed(() => users.value.length);
 
+onMounted(() => usersStore.loadUsers());
+
 async function submitForm() {
   form.value.validate();
 

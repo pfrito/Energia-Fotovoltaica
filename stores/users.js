@@ -2,14 +2,18 @@
 
 export const useUsersStore = defineStore("users", () => {
   // state
-  const users = computed(() => {
-    if (!process.client) return [];
-    const savedUsers = localStorage.getItem("users");
-    return savedUsers ? JSON.parse(savedUsers) : [];
-  });
+  const users = ref([]);
 
   // actions
+  function loadUsers() {
+    if (!process.client) return [];
+    const savedUsers = localStorage.getItem("users");
+    users.value = savedUsers ? JSON.parse(savedUsers) : [];
+  }
+
   function login(data) {
+    loadUsers();
+
     const existingUser = users.value.find((user) => user.email == data.email);
     if (existingUser) {
       if (existingUser.password == data.password) {
@@ -31,6 +35,8 @@ export const useUsersStore = defineStore("users", () => {
   }
 
   function register(data) {
+    loadUsers();
+
     const userData = {
       ...data,
       role:
@@ -53,6 +59,8 @@ export const useUsersStore = defineStore("users", () => {
   }
 
   function putUser(data) {
+    loadUsers();
+
     const index = users.value.findIndex((user) => user.id == data.id);
     if (index != -1) {
       let newUsers = [...users.value];
@@ -74,10 +82,12 @@ export const useUsersStore = defineStore("users", () => {
   function saveUsers(data) {
     if (!localStorage) return;
     localStorage.setItem("users", JSON.stringify(data));
+    loadUsers();
   }
 
   return {
     users,
+    loadUsers,
     login,
     register,
     putUser,
