@@ -1,0 +1,122 @@
+<template>
+  <div class="flex h-full bg-custom-primary-500 rounded-br-3xl rounded-tr-3xl">
+    <div
+      class="flex flex-col w-[50px] bg-custom-primary h-full rounded-br-3xl rounded-tr-3xl"
+    >
+      <div class="flex flex-col mt-[100px]">
+        <NuxtLink
+          v-for="(navLink, index) in navItems"
+          :key="index"
+          class="flex justify-center py-2 bg-custom-primary hover:bg-custom-primary-300 transition-all ease-in-out duration-150"
+          :class="{ 'border-l-4 border-white': activeView == navLink.value }"
+          :to="navLink.path"
+          @click="activeViewStore.setActiveView(navLink.value)"
+        >
+          <UIcon
+            :name="
+              activeView == navLink.value ? navLink.activeIcon : navLink.icon
+            "
+            class="text-2xl text-white"
+          ></UIcon>
+        </NuxtLink>
+      </div>
+      <button
+        class="flex items-center bg-custom-primary hover:bg-custom-primary-300 mt-auto mb-4 w-max mx-auto rounded-full p-1 transition-colors duration-150 ease-in-out"
+        @click="collapseSidebar = !collapseSidebar"
+      >
+        <UIcon
+          name="i-mdi-chevron-double-right"
+          class="text-white rounded-full cursor-pointer text-xl transition-all duration-150 ease-in-out"
+          :class="{
+            'rotate-0': collapseSidebar,
+            'rotate-180': !collapseSidebar,
+          }"
+        ></UIcon>
+      </button>
+    </div>
+    <div v-if="!collapseSidebar" class="flex flex-col relative w-[200px]">
+      <div class="absolute top-0 flex items-center text-white p-2">
+        <UIcon
+          name="i-mdi-solar-power-variant-outline"
+          class="text-[50px]"
+        ></UIcon>
+        <span class="font-semibold ml-2 text-lg">Energias Renovables</span>
+      </div>
+      <div class="flex flex-col mt-[100px]">
+        <NuxtLink
+          v-for="(navLink, index) in navItems"
+          :key="index"
+          :to="navLink.path"
+          class="flex justify-start items-center h-[40px] transition-all ease-in-out duration-150 rounded-s-3xl ps-4 text-sm"
+          :class="{
+            'bg-custom-background-100 hover:bg-custom-background-100 text-custom-primary-500':
+              activeView == navLink.value,
+            'bg-custom-primary-500 hover:bg-custom-primary text-white':
+              activeView != navLink.value,
+          }"
+          @click="activeViewStore.setActiveView(navLink.value)"
+        >
+          {{ navLink.label }}
+        </NuxtLink>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+const activeViewStore = useActiveViewStore();
+
+const collapseSidebar = ref(false);
+const navItems = ref([
+  {
+    icon: "i-mdi-chart-box-outline",
+    activeIcon: "i-mdi-chart-box",
+    label: "Estadísticas",
+    value: "stats",
+    path: "",
+    roles: ["standard-user", "admin"],
+  },
+  {
+    icon: "i-mdi-solar-power",
+    activeIcon: "i-mdi-solar-power",
+    label: "Realizar Predicciones",
+    value: "predict",
+    path: "predict-data",
+    roles: ["standard-user", "admin"],
+  },
+  {
+    icon: "i-mdi-robot-outline",
+    activeIcon: "i-mdi-robot",
+    label: "Entrenar Modelos",
+    value: "train",
+    path: "train-models",
+    roles: ["standard-user", "admin"],
+  },
+  {
+    icon: "i-mdi-database-outline",
+    activeIcon: "i-mdi-database",
+    label: "Introducir Datos",
+    value: "enter-data",
+    path: "/enter-data",
+    roles: ["standard-user", "admin"],
+  },
+  {
+    icon: "i-mdi-factory",
+    activeIcon: "i-mdi-factory",
+    label: "Parques Solares",
+    value: "parks",
+    path: "/solar-parks",
+    roles: ["admin"],
+  },
+  {
+    icon: "i-mdi-account-hard-hat-outline",
+    activeIcon: "i-mdi-account-hard-hat",
+    label: "Trabajadores",
+    value: "users",
+    path: "/users",
+    roles: ["admin"],
+  },
+]);
+
+const activeView = computed(() => activeViewStore.activeView);
+</script>

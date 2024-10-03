@@ -4,7 +4,7 @@
 
 @layer components {
   .custom-input-field {
-    @apply bg-custom-primary-50 py-1 rounded-xl;
+    @apply bg-custom-primary-50 py-1 rounded-3xl;
     .iconify {
         @apply text-custom-primary;
     }

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-white w-[400px] p-4 rounded-xl flex flex-col gap-x-4 gap-y-8 shadow-sm"
+    class="bg-white w-[400px] p-4 rounded-3xl flex flex-col gap-x-4 gap-y-8 shadow-sm"
   >
     <span class="w-full text-center text-lg font-semibold">{{
       selectedAuthOption == "Login" ? "Iniciar Sesión" : "Registrarse"

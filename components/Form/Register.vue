@@ -53,7 +53,7 @@
     <UButton
       type="submit"
       label="Entrar"
-      class="w-full bg-custom-primary hover:bg-custom-primary-500 focus-visible:outline-custom-primary-500 rounded-full border-none flex justify-center items-center mx-auto h-[40px] transition-colors ease-in-out duration-150"
+      class="w-full bg-custom-primary hover:bg-custom-primary-500 focus-visible:outline-custom-primary-500 rounded-3xl border-none flex justify-center items-center mx-auto h-[40px] transition-colors ease-in-out duration-150"
     />
   </UForm>
 </template>
