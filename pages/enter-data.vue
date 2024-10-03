@@ -60,6 +60,15 @@
           <DatePicker v-model="filters.date" is-required @close="close" />
         </template>
       </UPopover>
+
+      <UButton
+        v-if="filters.city || filters.date || filters.park"
+        variant="solid"
+        label="Cancelar Filtros"
+        icon="i-mdi-filter-remove-outline"
+        class="rounded-3xl focus-visible:outline-custom-primary-500 bg-custom-primary text-white hover:bg-custom-primary-500 transition-colors ease-in-out duration-150"
+        @click="cleanFilters"
+      />
     </UForm>
 
     <UTable :rows="predictions" :columns="columns" class="p-4">
@@ -331,6 +340,14 @@ function submitForm() {
     },
     Math.floor(Math.random() * 1801) + 200,
   );
+}
+
+function cleanFilters() {
+  filters.value = {
+    date: null,
+    city: null,
+    park: null,
+  };
 }
 
 function onClose(defaultClose) {
