@@ -5,7 +5,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const router = useRouter();
 
   if (
-    process.client &&
     to.meta.requiresRoles &&
     !to.meta.requiresRoles.includes(authStore.user.role)
   ) {

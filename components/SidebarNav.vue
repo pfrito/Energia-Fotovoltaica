@@ -5,7 +5,9 @@
     >
       <div class="flex flex-col mt-[100px]">
         <NuxtLink
-          v-for="(navLink, index) in navItems"
+          v-for="(navLink, index) in navItems.filter((navLink) =>
+            navLink.roles.includes(authStore.user.role),
+          )"
           :key="index"
           class="flex justify-center py-2 bg-custom-primary hover:bg-custom-primary-300 transition-all ease-in-out duration-150"
           :class="{ 'border-l-4 border-white': activeView == navLink.path }"
@@ -43,7 +45,9 @@
       </div>
       <div class="flex flex-col mt-[100px]">
         <NuxtLink
-          v-for="(navLink, index) in navItems"
+          v-for="(navLink, index) in navItems.filter((navLink) =>
+            navLink.roles.includes(authStore.user.role),
+          )"
           :key="index"
           :to="navLink.path"
           class="flex justify-start items-center h-[40px] transition-all ease-in-out duration-150 rounded-s-3xl ps-4 text-sm"
@@ -63,6 +67,7 @@
 
 <script setup>
 const route = useRoute();
+const authStore = useAuthStore();
 
 const collapseSidebar = ref(false);
 const navItems = ref([
@@ -76,9 +81,8 @@ const navItems = ref([
   {
     icon: "i-mdi-solar-power",
     activeIcon: "i-mdi-solar-power",
-    label: "Realizar Predicciones",
-
-    path: "/predict-data",
+    label: "Predicciones",
+    path: "/predictions",
     roles: ["standard-user", "admin"],
   },
   {

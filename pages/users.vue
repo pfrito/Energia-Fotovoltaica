@@ -29,7 +29,11 @@
       </template>
       <template #park-data="{ row }">
         <div class="flex justify-center items-center gap-1">
-          <span>{{ parks.some((park) => park.id == row.park) ? parks.find((park) => park.id == row.park).name : "Ninguno" }}</span>
+          <span>{{
+            parks.some((park) => park.id == row.park)
+              ? parks.find((park) => park.id == row.park).name
+              : "Ninguno"
+          }}</span>
           <UButton
             icon="i-mdi-pencil"
             size="sm"

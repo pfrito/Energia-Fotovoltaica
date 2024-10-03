@@ -1,4 +1,4 @@
-/*global defineStore, computed*/
+/*global defineStore, ref*/
 
 export const useUsersStore = defineStore("users", () => {
   // state
@@ -6,7 +6,6 @@ export const useUsersStore = defineStore("users", () => {
 
   // actions
   function loadUsers() {
-    if (!process.client) return [];
     const savedUsers = localStorage.getItem("users");
     users.value = savedUsers ? JSON.parse(savedUsers) : [];
   }

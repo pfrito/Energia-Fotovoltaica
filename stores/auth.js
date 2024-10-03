@@ -3,7 +3,6 @@
 export const useAuthStore = defineStore("auth", () => {
   // state
   const user = computed(() => {
-    if (!process.client) return {};
     const savedUser = localStorage.getItem("logged-user");
     return savedUser ? JSON.parse(savedUser) : {};
   });
