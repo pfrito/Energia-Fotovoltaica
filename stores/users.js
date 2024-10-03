@@ -20,9 +20,11 @@ export const useUsersStore = defineStore("users", () => {
         if (existingUser.is_active) {
           localStorage.setItem("logged-user", JSON.stringify(existingUser));
           return { success: true, message: "Usuario logueado exitosamente!" };
-        }
-        else {
-          return { success: false, message: "La cuenta asociada a este email esta inactiva." };
+        } else {
+          return {
+            success: false,
+            message: "La cuenta asociada a este email esta inactiva.",
+          };
         }
       } else {
         return {
