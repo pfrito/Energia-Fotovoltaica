@@ -12,8 +12,8 @@ export const useAuthStore = defineStore("auth", () => {
 
   // actions
   function logout() {
-      localStorage.removeItem("logged-user");
-      return { success: true, message: "Usuario deslogueado exitosamente!"}
+    localStorage.removeItem("logged-user");
+    return { success: true, message: "Usuario deslogueado exitosamente!" };
   }
 
   return {

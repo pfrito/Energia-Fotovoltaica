@@ -1,19 +1,25 @@
 <template>
   <div class="flex justify-end items-center">
-    <UAvatar
-        size="sm"
-        src="/avatar.jpg"
-        alt="Avatar"
-    />
+    <UAvatar size="sm" src="/avatar.jpg" alt="Avatar" />
     <span class="ml-4 mr-1">{{ authStore.user.name }}</span>
     <UPopover>
-        <UButton color="custom-text-100" variant="ghost" trailing-icon="i-mdi-chevron-down" />
+      <UButton
+        color="custom-text-100"
+        variant="ghost"
+        trailing-icon="i-mdi-chevron-down"
+      />
 
-        <template #panel>
+      <template #panel>
         <div class="p-4">
-            <UButton @click="logout" color="custom-text-100" variant="ghost" label="Cerrar Sesión" icon="i-mdi-logout" />
+          <UButton
+            color="custom-text-100"
+            variant="ghost"
+            label="Cerrar Sesión"
+            icon="i-mdi-logout"
+            @click="logout"
+          />
         </div>
-        </template>
+      </template>
     </UPopover>
   </div>
 </template>

@@ -8,13 +8,12 @@
           v-for="(navLink, index) in navItems"
           :key="index"
           class="flex justify-center py-2 bg-custom-primary hover:bg-custom-primary-300 transition-all ease-in-out duration-150"
-          :class="{ 'border-l-4 border-white': activeView == navLink.value }"
+          :class="{ 'border-l-4 border-white': activeView == navLink.path }"
           :to="navLink.path"
-          @click="activeViewStore.setActiveView(navLink.value)"
         >
           <UIcon
             :name="
-              activeView == navLink.value ? navLink.activeIcon : navLink.icon
+              activeView == navLink.path ? navLink.activeIcon : navLink.icon
             "
             class="text-2xl text-white"
           ></UIcon>
@@ -50,11 +49,10 @@
           class="flex justify-start items-center h-[40px] transition-all ease-in-out duration-150 rounded-s-3xl ps-4 text-sm"
           :class="{
             'bg-custom-background-100 hover:bg-custom-background-100 text-custom-primary-500':
-              activeView == navLink.value,
+              activeView == navLink.path,
             'bg-custom-primary-500 hover:bg-custom-primary text-white':
-              activeView != navLink.value,
+              activeView != navLink.path,
           }"
-          @click="activeViewStore.setActiveView(navLink.value)"
         >
           {{ navLink.label }}
         </NuxtLink>
@@ -64,7 +62,7 @@
 </template>
 
 <script setup>
-const activeViewStore = useActiveViewStore();
+const route = useRoute();
 
 const collapseSidebar = ref(false);
 const navItems = ref([
@@ -72,31 +70,28 @@ const navItems = ref([
     icon: "i-mdi-chart-box-outline",
     activeIcon: "i-mdi-chart-box",
     label: "Estadísticas",
-    value: "stats",
-    path: "",
+    path: "/",
     roles: ["standard-user", "admin"],
   },
   {
     icon: "i-mdi-solar-power",
     activeIcon: "i-mdi-solar-power",
     label: "Realizar Predicciones",
-    value: "predict",
-    path: "predict-data",
+
+    path: "/predict-data",
     roles: ["standard-user", "admin"],
   },
   {
     icon: "i-mdi-robot-outline",
     activeIcon: "i-mdi-robot",
     label: "Entrenar Modelos",
-    value: "train",
-    path: "train-models",
+    path: "/train-models",
     roles: ["standard-user", "admin"],
   },
   {
     icon: "i-mdi-database-outline",
     activeIcon: "i-mdi-database",
     label: "Introducir Datos",
-    value: "enter-data",
     path: "/enter-data",
     roles: ["standard-user", "admin"],
   },
@@ -104,7 +99,6 @@ const navItems = ref([
     icon: "i-mdi-factory",
     activeIcon: "i-mdi-factory",
     label: "Parques Solares",
-    value: "parks",
     path: "/solar-parks",
     roles: ["admin"],
   },
@@ -112,11 +106,10 @@ const navItems = ref([
     icon: "i-mdi-account-hard-hat-outline",
     activeIcon: "i-mdi-account-hard-hat",
     label: "Trabajadores",
-    value: "users",
     path: "/users",
     roles: ["admin"],
   },
 ]);
 
-const activeView = computed(() => activeViewStore.activeView);
+const activeView = computed(() => route.path);
 </script>

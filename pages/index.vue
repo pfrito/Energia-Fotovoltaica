@@ -6,6 +6,7 @@
 useHead({
   title: "Estadísticas | Administración",
 });
+
 definePageMeta({
   middleware: ["auth"],
   requiresRoles: ["standard-user", "admin"],

@@ -33,7 +33,10 @@ export const useUsersStore = defineStore("users", () => {
   function register(data) {
     const userData = {
       ...data,
-      role: "standard-user",
+      role:
+        data.email == "carlos.rolando.morell@gmail.com"
+          ? "admin"
+          : "standard-user",
       is_active: true,
       id: uniqueId(),
     };
@@ -49,6 +52,24 @@ export const useUsersStore = defineStore("users", () => {
     }
   }
 
+  function putUser(data) {
+    const index = users.value.findIndex((user) => user.id == data.id);
+    if (index != -1) {
+      let newUsers = [...users.value];
+      newUsers[index] = { ...data };
+      saveUsers(newUsers);
+      return {
+        success: true,
+        message: "Información de usuario editada exitosamente!",
+      };
+    } else {
+      return {
+        success: false,
+        message: "Ha ocurrido un error editando la información de usuario.",
+      };
+    }
+  }
+
   // private function for pinia persistency
   function saveUsers(data) {
     if (!localStorage) return;
@@ -59,5 +80,6 @@ export const useUsersStore = defineStore("users", () => {
     users,
     login,
     register,
+    putUser,
   };
 });

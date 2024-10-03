@@ -5,7 +5,7 @@
     <span class="w-full text-center text-lg font-semibold">{{
       selectedAuthOption == "Login" ? "Iniciar Sesión" : "Registrarse"
     }}</span>
-    <p class="w-full text-center text-custom-text-300 text-sm">
+    <p class="w-full text-center text-custom-text-200 text-sm">
       {{
         selectedAuthOption == "Login"
           ? "Inicia sesión en nuestra plataforma para acceder a todas nuestras funcionalidades!"
