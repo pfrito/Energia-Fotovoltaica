@@ -29,7 +29,7 @@
       </template>
       <template #park-data="{ row }">
         <div class="flex justify-center items-center gap-1">
-          <span>{{ row.park ? row.park : "Ninguno" }}</span>
+          <span>{{ parks.some((park) => park.id == row.park) ? parks.find((park) => park.id == row.park).name : "Ninguno" }}</span>
           <UButton
             icon="i-mdi-pencil"
             size="sm"
@@ -101,7 +101,9 @@
               v-model="state.park"
               placeholder="Elige el nombre de tu planta"
               icon="i-mdi-factory"
-              :options="[]"
+              :options="parks"
+              option-attribute="name"
+              value-attribute="id"
               variant="none"
               class="custom-input-field"
             />
@@ -133,6 +135,7 @@ definePageMeta({
 });
 
 const usersStore = useUsersStore();
+const parksStore = useParksStore();
 
 const filters = ref({
   status: "All",
@@ -190,9 +193,14 @@ const users = computed(() => {
     .slice((page.value - 1) * pageCount.value, page.value * pageCount.value);
 });
 
+const parks = computed(() => parksStore.parks);
+
 const total = computed(() => users.value.length);
 
-onMounted(() => usersStore.loadUsers());
+onMounted(() => {
+  usersStore.loadUsers();
+  parksStore.loadParks();
+});
 
 async function submitForm() {
   form.value.validate();
