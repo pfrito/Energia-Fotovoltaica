@@ -41,6 +41,15 @@ export const usePredictionsStore = defineStore("predictions", () => {
     return { success: true, message: "Predicción añadida exitosamente!" };
   }
 
+  function postData(data) {
+    loadPredictions();
+
+    const newPredictions = [...predictions.value, data];
+    savePredictions(newPredictions);
+
+    return { success: true, message: "Datos introducidos exitosamente!" };
+  }
+
   // private function for pinia persistency
   function savePredictions(data) {
     if (!localStorage) return;
@@ -52,5 +61,6 @@ export const usePredictionsStore = defineStore("predictions", () => {
     predictions,
     loadPredictions,
     postPrediction,
+    postData,
   };
 });

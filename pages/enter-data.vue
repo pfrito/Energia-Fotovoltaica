@@ -94,23 +94,23 @@
       </div>
     </div>
 
-    <UModal v-model="showPredictionForm" :prevent-close="false">
+    <UModal v-model="showDataForm" :prevent-close="false">
       <UCard
         :ui="{ ring: '', divide: 'divide-y divide-custom-text-500' }"
         class="p-4"
       >
         <template #header>
-          <p class="text-center">Crear Predicción</p>
+          <p class="text-center">Introducir Datos</p>
         </template>
 
         <UForm
           ref="form"
           :state="state"
           :validate="validate"
-          class="flex flex-col gap-4"
+          class="flex flex-wrap gap-4"
           @submit="submitForm"
         >
-          <UFormGroup name="park" class="custom-input-wrapper">
+          <UFormGroup name="park" class="custom-input-wrapper w-full">
             <USelectMenu
               v-model="state.park"
               placeholder="Parque o planta"
@@ -122,57 +122,44 @@
               class="custom-input-field"
             />
           </UFormGroup>
-          <UFormGroup name="startdate" class="custom-input-wrapper">
+          <UFormGroup name="date" class="custom-input-wrapper w-full">
             <UPopover :popper="{ placement: 'bottom-start' }">
               <UButton
                 icon="i-mdi-calendar-today"
                 :label="
-                  state.startdate
-                    ? formatDateToIsoDate(state.startdate)
-                    : 'Fecha Inicio'
+                  state.date ? formatDateToIsoDate(state.date) : 'Fecha Inicio'
                 "
                 variant="none"
                 class="custom-input-field rounded-3xl w-full h-[40px]"
                 :class="{
-                  'text-custom-text': state.startdate,
-                  'text-gray-400': !state.startdate,
+                  'text-custom-text': state.date,
+                  'text-gray-400': !state.date,
                 }"
               ></UButton>
 
               <template #panel="{ close }">
                 <DatePicker
-                  v-model="state.startdate"
+                  v-model="state.date"
                   is-required
                   @close="onClose(close)"
                 />
               </template>
             </UPopover>
           </UFormGroup>
-          <UFormGroup name="enddate" class="custom-input-wrapper">
-            <UPopover :popper="{ placement: 'bottom-start' }">
-              <UButton
-                icon="i-mdi-calendar"
-                :label="
-                  state.enddate
-                    ? formatDateToIsoDate(state.enddate)
-                    : 'Fecha Fin'
-                "
-                variant="none"
-                class="custom-input-field rounded-3xl w-full h-[40px]"
-                :class="{
-                  'text-custom-text': state.enddate,
-                  'text-gray-400': !state.enddate,
-                }"
-              ></UButton>
-
-              <template #panel="{ close }">
-                <DatePicker
-                  v-model="state.enddate"
-                  is-required
-                  @close="onClose(close)"
-                />
-              </template>
-            </UPopover>
+          <UFormGroup
+            v-for="(timeField, index) in Object.entries(timeFields)"
+            :key="index"
+            :name="timeField[0]"
+            class="custom-input-wrapper grow w-[48%]"
+          >
+            <UInput
+              v-model="state[timeField[0]]"
+              type="text"
+              variant="none"
+              icon="i-mdi-solar-power"
+              :placeholder="`Irradiancia durante ${timeField[0]}`"
+              class="custom-input-field"
+            />
           </UFormGroup>
           <div class="w-full mx-auto">
             <UButton
@@ -189,17 +176,17 @@
   <div class="flex justify-end items-center">
     <UButton
       variant="solid"
-      label="Hacer Predicción"
+      label="Introducir Datos"
       icon="i-mdi-plus"
       class="rounded-3xl focus-visible:outline-custom-primary-500 bg-custom-primary text-white hover:bg-custom-primary-500 transition-colors ease-in-out duration-150"
-      @click="showPredictionForm = true"
+      @click="showDataForm = true"
     />
   </div>
 </template>
 
 <script setup>
 useHead({
-  title: "Predicciones | Administración",
+  title: "Introducir Datos | Administración",
 });
 
 definePageMeta({
@@ -211,7 +198,7 @@ definePageMeta({
 const parksStore = useParksStore();
 const predictionsStore = usePredictionsStore();
 
-const showPredictionForm = ref(false);
+const showDataForm = ref(false);
 const form = ref();
 const page = ref(1);
 const pageCount = ref(10);
@@ -222,8 +209,19 @@ const filters = ref({
 });
 const state = ref({
   park: "",
-  startdate: null,
-  enddate: null,
+  date: null,
+});
+const timeFields = computed(() => {
+  const fields = {};
+  const start = new Date("1970-01-01T07:00:00");
+  const end = new Date("1970-01-01T17:00:00");
+  while (start <= end) {
+    const key = start.toTimeString().split(" ")[0];
+    fields[key] = null;
+    start.setMinutes(start.getMinutes() + 60);
+  }
+
+  return fields;
 });
 const columns = ref([
   {
@@ -242,11 +240,13 @@ const validate = (state) => {
   const errors = [];
   if (!state.park || !state.park.length)
     errors.push({ path: "park", message: "Parque Requerido" });
-  if (!state.startdate)
-    errors.push({ path: "startdate", message: "Fecha Inicio Requerida" });
-  if (!state.enddate)
-    errors.push({ path: "enddate", message: "Fecha Fin Requerida" });
+  if (!state.date) errors.push({ path: "date", message: "Fecha Requerida" });
 
+  // validate time fields
+  Object.entries(timeFields.value).forEach((timeField) => {
+    if (!state[timeField[0]] || !state[timeField[0]].length)
+      errors.push({ path: timeField[0], message: "Irradiancia Requerida" });
+  });
   return errors;
 };
 
@@ -289,17 +289,17 @@ onMounted(() => {
   parksStore.loadParks();
   predictionsStore.loadPredictions();
 
-  //generate time columns for table
-  const start = new Date("1970-01-01T07:00:00");
-  const end = new Date("1970-01-01T17:00:00");
-  while (start <= end) {
+  Object.entries(timeFields.value).forEach((timeField) => {
+    //generate time columns for table
     columns.value.push({
-      key: start.toTimeString().split(" ")[0],
-      label: start.toTimeString().split(" ")[0],
+      key: timeField[0],
+      label: timeField[0],
       class: "italic text-center",
     });
-    start.setMinutes(start.getMinutes() + 60);
-  }
+
+    //generate time fields for state object
+    state.value[timeField[0]] = null;
+  });
 });
 
 function submitForm() {
@@ -311,12 +311,13 @@ function submitForm() {
   const payload = {
     ...state.value,
     city: parks.value.find((park) => park.id == state.value.park).city,
+    date: formatDateToIsoDate(state.value.date),
   };
 
   start();
   setTimeout(
     () => {
-      const { success, message } = predictionsStore.postPrediction(payload);
+      const { success, message } = predictionsStore.postData(payload);
       finish();
       toast.add({
         id: uniqueId(),
@@ -326,7 +327,7 @@ function submitForm() {
         color: success ? "green" : "red",
         timeout: 3000,
       });
-      if (success) showPredictionForm.value = false;
+      if (success) showDataForm.value = false;
     },
     Math.floor(Math.random() * 1801) + 200,
   );
