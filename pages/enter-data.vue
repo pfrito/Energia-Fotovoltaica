@@ -135,9 +135,7 @@
             <UPopover :popper="{ placement: 'bottom-start' }">
               <UButton
                 icon="i-mdi-calendar-today"
-                :label="
-                  state.date ? formatDateToIsoDate(state.date) : 'Fecha Inicio'
-                "
+                :label="state.date ? formatDateToIsoDate(state.date) : 'Fecha'"
                 variant="none"
                 class="custom-input-field rounded-3xl w-full h-[40px]"
                 :class="{
