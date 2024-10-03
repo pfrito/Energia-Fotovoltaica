@@ -66,10 +66,18 @@
 </template>
 
 <script setup>
+const emit = defineEmits(["update:modelValue"]);
+
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
+    required: true,
+  },
+});
+
 const route = useRoute();
 const authStore = useAuthStore();
 
-const collapseSidebar = ref(false);
 const navItems = ref([
   {
     icon: "i-mdi-chart-box-outline",
@@ -116,4 +124,13 @@ const navItems = ref([
 ]);
 
 const activeView = computed(() => route.path);
+
+const collapseSidebar = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(newValue) {
+    emit("update:modelValue", newValue);
+  },
+});
 </script>

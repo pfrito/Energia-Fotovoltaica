@@ -44,14 +44,14 @@
       </p>
       <div class="ml-auto flex gap-1">
         <button
-          class="rounded-full bg-custom-primary text-white p-2 flex items-center text-xl"
+          class="rounded-full bg-custom-primary hover:bg-custom-primary-500 focus-visible:outline-custom-primary-500 transition-colors ease-in-out duration-150 text-white p-2 flex items-center text-xl"
           :disabled="page == 1"
           @click="goToPage(-1)"
         >
           <UIcon name="i-mdi-chevron-left" />
         </button>
         <button
-          class="rounded-full bg-custom-primary text-white p-2 flex items-center text-xl"
+          class="rounded-full bg-custom-primary hover:bg-custom-primary-500 focus-visible:outline-custom-primary-500 transition-colors ease-in-out duration-150 text-white p-2 flex items-center text-xl"
           :disabled="page * pageCount >= total"
           @click="goToPage(1)"
         >
@@ -207,7 +207,7 @@ const parks = computed(() => {
   );
 });
 
-const total = computed(() => parks.value.length);
+const total = computed(() => parksStore.parks.length);
 
 onMounted(() => parksStore.loadParks());
 

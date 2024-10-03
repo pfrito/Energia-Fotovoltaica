@@ -68,14 +68,14 @@
       </p>
       <div class="ml-auto flex gap-1">
         <button
-          class="rounded-full bg-custom-primary text-white p-2 flex items-center text-xl"
+          class="rounded-full bg-custom-primary hover:bg-custom-primary-500 focus-visible:outline-custom-primary-500 transition-colors ease-in-out duration-150 text-white p-2 flex items-center text-xl"
           :disabled="page == 1"
           @click="goToPage(-1)"
         >
           <UIcon name="i-mdi-chevron-left" />
         </button>
         <button
-          class="rounded-full bg-custom-primary text-white p-2 flex items-center text-xl"
+          class="rounded-full bg-custom-primary hover:bg-custom-primary-500 focus-visible:outline-custom-primary-500 transition-colors ease-in-out duration-150 text-white p-2 flex items-center text-xl"
           :disabled="page * pageCount >= total"
           @click="goToPage(1)"
         >
@@ -199,7 +199,17 @@ const users = computed(() => {
 
 const parks = computed(() => parksStore.parks);
 
-const total = computed(() => users.value.length);
+const total = computed(
+  () =>
+    usersStore.users.filter((user) => {
+      if (
+        filters.value.status == "All" ||
+        (filters.value.status == "Active" && user.is_active) ||
+        (filters.value.status == "Unactive" && !user.is_active)
+      )
+        return true;
+    }).length,
+);
 
 onMounted(() => {
   usersStore.loadUsers();
